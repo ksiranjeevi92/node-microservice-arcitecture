@@ -1,0 +1,10 @@
+starshipkart-mern/node_modules
+starshipkart-mern/.env
+
+blog-cloud/client/node_modules
+blog-cloud/client/build
+blog-cloud/comments/node_modules
+blog-cloud/event-bus/node_modules
+blog-cloud/moderation/node_modules
+blog-cloud/posts/node_modules
+blog-cloud/query/node_modules
