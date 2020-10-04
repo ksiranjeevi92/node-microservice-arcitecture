@@ -8,4 +8,4 @@
 
 ## Docker
 
-### Owner-ship and copy rights reserverd to SIRANJEEVI.K auther and admin of this repository
+### Owner-ship and copy rights reserverd to SIRANJEEVI.K author and admin of this repository
