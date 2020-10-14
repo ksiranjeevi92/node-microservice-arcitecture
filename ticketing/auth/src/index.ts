@@ -1,25 +1,26 @@
-import { errorHandler } from './middleware/error-handler';
-import express from 'express';
-import {json} from 'body-parser';
-import { currentUserRouter } from './routes/current-user';
-import { signinRouter } from './routes/signin';
-import { signoutRouter } from './routes/signout';
-import { signupRouter } from './routes/signup';
+import mongoose from 'mongoose';
 
-const app = express();
+import { app } from './app';
 
-app.use(currentUserRouter);
-app.use(signinRouter);
-app.use(signoutRouter);
-app.use(signupRouter);
-app.use(errorHandler);
+const start = async () => {
+  if (!process.env.JWT_KEY) {
+    throw new Error('JWT_KEY must be defined');
+  }
 
-app.get('/api/users/user', (req,res) => {
-    res.send('hi there')
-});
+  try {
+    await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true
+    });
+    console.log('Connected to MongoDb');
+  } catch (err) {
+    console.error(err);
+  }
 
-app.use(json());
+  app.listen(3000, () => {
+    console.log('Listening on port 3000!!!!!!!!');
+  });
+};
 
-app.listen(3000, () => {
-    console.log('Auth listning on port 3000');
-}); 
+start();

@@ -1,26 +1,58 @@
-import express, {Request, Response} from 'express';
-import {body, validationResult} from 'express-validator';
+import express, { Request, Response } from 'express';
+import { body } from 'express-validator';
+import jwt from 'jsonwebtoken';
+
+import { Password } from '../services/password';
+import { User } from '../models/user';
+import { validateRequest } from '../middlewares/validate-request';
+import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
 
-router.post('/api/users/signin',[
-    body('email').
-    isEmail()
-    .withMessage('Email must be valid'),
+router.post(
+  '/api/users/signin',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Email must be valid'),
     body('password')
-    .trim()
-    .isLength({min:4, max: 20})
-   .withMessage('password must be min 4 max 20 characters')
-],(req: Request,res: Response) => {
-    let errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).send(errors.array());
+      .trim()
+      .notEmpty()
+      .withMessage('You must supply a password')
+  ],
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      throw new BadRequestError('Invalid credentials');
     }
-    
-    const {email,password} = req.body;
 
-    res.send({});
-});
+    const passwordsMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+    if (!passwordsMatch) {
+      throw new BadRequestError('Invalid Credentials');
+    }
 
+    // Generate JWT
+    const userJwt = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email
+      },
+      process.env.JWT_KEY!
+    );
 
-export {router as signinRouter}
+    // Store it on session object
+    req.session = {
+      jwt: userJwt
+    };
+
+    res.status(200).send(existingUser);
+  }
+);
+
+export { router as signinRouter };
