@@ -11,5 +11,6 @@ blog-cloud/query/node_modules
 
 
 ticketing/auth/node_modules
+ticketing/client/node_modules
 
 /node_modules
