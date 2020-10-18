@@ -13,4 +13,37 @@ blog-cloud/query/node_modules
 ticketing/auth/node_modules
 ticketing/client/node_modules
 
+bug-tracker/node_modules
+
 /node_modules
+
+bug-tracker/.pnp
+bug-tracker/.pnp.js
+
+# testing
+bug-tracker/coverage
+
+# next.js
+bug-tracker/.next/
+bug-tracker/out/
+
+# production
+bug-tracker/build
+
+# misc
+bug-tracker/.DS_Store
+bug-tracker/*.pem
+
+# debug
+bug-tracker/npm-debug.log*
+bug-tracker/yarn-debug.log*
+bug-tracker/yarn-error.log*
+
+# local env files
+bug-tracker/.env.local
+bug-tracker/.env.development.local
+bug-tracker/.env.test.local
+bug-tracker/.env.production.local
+
+# vercel
+bug-tracker/.vercel
